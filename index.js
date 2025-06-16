@@ -34,6 +34,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const match = document.cookie.match('(?:^|; )street=([^;]*)');
   street = match ? decodeURIComponent(match[1]) : street;
   document.cookie = `street=${encodeURIComponent(street)};path=/;max-age=${COOKIE_MAX_AGE}`;
+
+  // Load animations option from cookie
+  const animMatch = document.cookie.match('(?:^|; )animations=([^;]*)');
+  if (animMatch) {
+    uOptions.animations = animMatch[1] === 'true';
+  }
+
+  // Update options UI to reflect current values
+  const animBtn = document.getElementById('optAnimations');
+  if (animBtn) {
+    animBtn.textContent = uOptions.animations ? 'Εφέ Κίνησης ON' : 'Εφέ Κίνησης OFF';
+  }
 });
 
 
@@ -318,7 +330,14 @@ const switchto = (from, to) => {
 function options(option, el) {
     if (option === 'animations') {
         uOptions.animations = !uOptions.animations;
-        el.textContent = uOptions.animations ? 'Animations ON' : 'Animations OFF';
+        // Save to cookie
+        document.cookie = `animations=${uOptions.animations};path=/;max-age=${COOKIE_MAX_AGE}`;
+        el.textContent = uOptions.animations ? 'Εφέ Κίνησης ON' : 'Εφέ Κίνησης OFF';
+    }
+    if (option === 'resetcookies') {
+        document.cookie = 'street=;path=/;max-age=0';
+        document.cookie = 'animations=;path=/;max-age=0';
+        window.location.reload();
     }
 }
 

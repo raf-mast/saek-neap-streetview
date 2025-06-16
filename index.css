@@ -114,8 +114,6 @@ html {
      object-position: top;
 }
 #main .street .arrow {
-  outline: solid 5px black;
-  outline-style: dotted;
   z-index: 2;
   background-size: cover !important;
   background-repeat: no-repeat !important;
@@ -259,8 +257,6 @@ html {
   -ms-interpolation-mode: nearest-neighbor; /* IE8+                           */
   background-size: contain !important;
   background-repeat: no-repeat !important;
-  outline: solid 5px rgb(255, 86, 86);
-  outline-style: dotted;
 }
 #main #start #menu, #main #start #credits, #main #start #options {
   -webkit-backdrop-filter: blur(7px);
