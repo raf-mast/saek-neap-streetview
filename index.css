@@ -262,12 +262,12 @@ html {
   outline: solid 5px rgb(255, 86, 86);
   outline-style: dotted;
 }
-#main #start #menu, #main #start #credits {
+#main #start #menu, #main #start #credits, #main #start #options {
   -webkit-backdrop-filter: blur(7px);
           backdrop-filter: blur(7px);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 25px;
   position: fixed;
   top: 0;
   z-index: 999;
@@ -276,6 +276,12 @@ html {
   width: 100%;
   aspect-ratio: 1920/1080;
   overflow: hidden;
+}
+#main #start #menu {
+  flex-direction: column;
+}
+#main #start #options {
+  display: none;
 }
 #main #start #credits {
   display: none;
@@ -302,6 +308,24 @@ html {
 #main #start #credits .text td:nth-child(2) {
   color: rgb(220, 220, 220);
 }
+#main #start .btn-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12.5px;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+#main #start .btn-wrapper .button {
+  cursor: pointer;
+  color: white;
+  font-size: 17.5px;
+  background-color: black;
+  outline: solid 2px white;
+  border-radius: 7.5px;
+  padding: 6px 20px;
+  width: 100%;
+  text-align: center;
+}
 #main #start .text {
   color: white;
   font-size: 25px;
@@ -313,15 +337,6 @@ html {
   margin: 0 auto;
   padding: 10px;
   margin-bottom: 25px;
-}
-#main #start .button {
-  cursor: pointer;
-  color: white;
-  font-size: 17.5px;
-  background-color: black;
-  outline: solid 2px white;
-  border-radius: 7.5px;
-  padding: 5px;
 }
 #main #start .slideshow-container {
   position: fixed;

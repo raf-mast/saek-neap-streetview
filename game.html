@@ -1,0 +1,534 @@
+<html>
+<head>
+    <title>ΣAΕΚ Νεάπολης Street View</title>
+
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="index.css">
+
+    <link rel="icon" type="image/png" href="favicon.ico">
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="transitionScreen">
+    </div>
+    <div id="main">
+        <p id="debug_text" style="display:none;position:fixed;z-index:10;background-color:black;color:white;">0-0-0</p>
+        <div id="warning">Το παιχνίδι παίζεται μόνο σε πλήρη οθόνη και αναλογία οθόνης 16:9!</div>
+
+        <div id="start">
+            <div id="menu">
+              <div class="text">SAEK NEAPOLIS STREET VIEW GAME</div>
+              <div class="btn-wrapper">
+                <div class="start button" onclick="startGame()">Start game</div>
+                <div class="start button" onclick="switchto('menu', 'options')">Options</div>
+                <div class="start button" onclick="switchto('menu', 'credits')">Credits</div>
+              </div>
+            </div>
+
+            <div id="options">
+                <div class="btn-wrapper">
+                  <div class="button" onclick="options('animations', this)">Animations ON</div>
+                </div>
+                <div class="btn-wrapper">
+                  <div class="button" onclick="switchto('options', 'menu')">Back</div>
+                </div>
+            </div>
+
+            <div id="credits">
+                <div class="text">
+                    <table>
+                        <tbody>
+                          <tr>
+                            <td>Ραφαήλ Νικόλαος Μαστρολάμπρου</td>
+                            <td>Programmer DIY</td>
+                            <td class="links">
+                              <a href="https://www.linkedin.com/in/mastrolamprou" target="_blank" rel="noopener noreferrer">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 128 128"><path fill="#0076b2" d="M116 3H12a8.91 8.91 0 0 0-9 8.8v104.42a8.91 8.91 0 0 0 9 8.78h104a8.93 8.93 0 0 0 9-8.81V11.77A8.93 8.93 0 0 0 116 3"/><path fill="#fff" d="M21.06 48.73h18.11V107H21.06zm9.06-29a10.5 10.5 0 1 1-10.5 10.49a10.5 10.5 0 0 1 10.5-10.49m20.41 29h17.36v8h.24c2.42-4.58 8.32-9.41 17.13-9.41C103.6 47.28 107 59.35 107 75v32H88.89V78.65c0-6.75-.12-15.44-9.41-15.44s-10.87 7.36-10.87 15V107H50.53z"/></svg>
+                              </a>
+                              <a href="https://github.com/raf-mast" target="_blank" rel="noopener noreferrer">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256"><g fill="none"><rect width="256" height="256" fill="#242938" rx="60"/><path fill="#fff" d="M128.001 30C72.779 30 28 74.77 28 130.001c0 44.183 28.653 81.667 68.387 94.89c4.997.926 6.832-2.169 6.832-4.81c0-2.385-.093-10.262-.136-18.618c-27.82 6.049-33.69-11.799-33.69-11.799c-4.55-11.559-11.104-14.632-11.104-14.632c-9.073-6.207.684-6.079.684-6.079c10.042.705 15.33 10.305 15.33 10.305c8.919 15.288 23.394 10.868 29.1 8.313c.898-6.464 3.489-10.875 6.349-13.372c-22.211-2.529-45.56-11.104-45.56-49.421c0-10.918 3.906-19.839 10.303-26.842c-1.039-2.519-4.462-12.69.968-26.464c0 0 8.398-2.687 27.508 10.25c7.977-2.215 16.531-3.326 25.03-3.364c8.498.038 17.06 1.149 25.051 3.365c19.087-12.939 27.473-10.25 27.473-10.25c5.443 13.773 2.019 23.945.98 26.463c6.412 7.003 10.292 15.924 10.292 26.842c0 38.409-23.394 46.866-45.662 49.341c3.587 3.104 6.783 9.189 6.783 18.519c0 13.38-.116 24.149-.116 27.443c0 2.661 1.8 5.779 6.869 4.797C199.383 211.64 228 174.169 228 130.001C228 74.771 183.227 30 128.001 30M65.454 172.453c-.22.497-1.002.646-1.714.305c-.726-.326-1.133-1.004-.898-1.502c.215-.512.999-.654 1.722-.311c.727.326 1.141 1.01.89 1.508m4.919 4.389c-.477.443-1.41.237-2.042-.462c-.654-.697-.777-1.629-.293-2.078c.491-.442 1.396-.235 2.051.462c.654.706.782 1.631.284 2.078m3.374 5.616c-.613.426-1.615.027-2.234-.863c-.613-.889-.613-1.955.013-2.383c.621-.427 1.608-.043 2.236.84c.611.904.611 1.971-.015 2.406m5.707 6.504c-.548.604-1.715.442-2.57-.383c-.874-.806-1.118-1.95-.568-2.555c.555-.606 1.729-.435 2.59.383c.868.804 1.133 1.957.548 2.555m7.376 2.195c-.242.784-1.366 1.14-2.499.807c-1.13-.343-1.871-1.26-1.642-2.052c.235-.788 1.364-1.159 2.505-.803c1.13.341 1.871 1.252 1.636 2.048m8.394.932c.028.824-.932 1.508-2.121 1.523c-1.196.027-2.163-.641-2.176-1.452c0-.833.939-1.51 2.134-1.53c1.19-.023 2.163.639 2.163 1.459m8.246-.316c.143.804-.683 1.631-1.864 1.851c-1.161.212-2.236-.285-2.383-1.083c-.144-.825.697-1.651 1.856-1.865c1.183-.205 2.241.279 2.391 1.097"/></g></svg>
+                              </a>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Λεονίς Πέσκου</td>
+                            <td>Data Analysist</td>
+                            <td class="links">
+                              <a href="https://www.linkedin.com/in/leonis-peshku-6321922b7/" target="_blank" rel="noopener noreferrer">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 128 128"><path fill="#0076b2" d="M116 3H12a8.91 8.91 0 0 0-9 8.8v104.42a8.91 8.91 0 0 0 9 8.78h104a8.93 8.93 0 0 0 9-8.81V11.77A8.93 8.93 0 0 0 116 3"/><path fill="#fff" d="M21.06 48.73h18.11V107H21.06zm9.06-29a10.5 10.5 0 1 1-10.5 10.49a10.5 10.5 0 0 1 10.5-10.49m20.41 29h17.36v8h.24c2.42-4.58 8.32-9.41 17.13-9.41C103.6 47.28 107 59.35 107 75v32H88.89V78.65c0-6.75-.12-15.44-9.41-15.44s-10.87 7.36-10.87 15V107H50.53z"/></svg>
+                              </a>
+                              <a href="https://github.com/LeonisPs" target="_blank" rel="noopener noreferrer">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256"><g fill="none"><rect width="256" height="256" fill="#242938" rx="60"/><path fill="#fff" d="M128.001 30C72.779 30 28 74.77 28 130.001c0 44.183 28.653 81.667 68.387 94.89c4.997.926 6.832-2.169 6.832-4.81c0-2.385-.093-10.262-.136-18.618c-27.82 6.049-33.69-11.799-33.69-11.799c-4.55-11.559-11.104-14.632-11.104-14.632c-9.073-6.207.684-6.079.684-6.079c10.042.705 15.33 10.305 15.33 10.305c8.919 15.288 23.394 10.868 29.1 8.313c.898-6.464 3.489-10.875 6.349-13.372c-22.211-2.529-45.56-11.104-45.56-49.421c0-10.918 3.906-19.839 10.303-26.842c-1.039-2.519-4.462-12.69.968-26.464c0 0 8.398-2.687 27.508 10.25c7.977-2.215 16.531-3.326 25.03-3.364c8.498.038 17.06 1.149 25.051 3.365c19.087-12.939 27.473-10.25 27.473-10.25c5.443 13.773 2.019 23.945.98 26.463c6.412 7.003 10.292 15.924 10.292 26.842c0 38.409-23.394 46.866-45.662 49.341c3.587 3.104 6.783 9.189 6.783 18.519c0 13.38-.116 24.149-.116 27.443c0 2.661 1.8 5.779 6.869 4.797C199.383 211.64 228 174.169 228 130.001C228 74.771 183.227 30 128.001 30M65.454 172.453c-.22.497-1.002.646-1.714.305c-.726-.326-1.133-1.004-.898-1.502c.215-.512.999-.654 1.722-.311c.727.326 1.141 1.01.89 1.508m4.919 4.389c-.477.443-1.41.237-2.042-.462c-.654-.697-.777-1.629-.293-2.078c.491-.442 1.396-.235 2.051.462c.654.706.782 1.631.284 2.078m3.374 5.616c-.613.426-1.615.027-2.234-.863c-.613-.889-.613-1.955.013-2.383c.621-.427 1.608-.043 2.236.84c.611.904.611 1.971-.015 2.406m5.707 6.504c-.548.604-1.715.442-2.57-.383c-.874-.806-1.118-1.95-.568-2.555c.555-.606 1.729-.435 2.59.383c.868.804 1.133 1.957.548 2.555m7.376 2.195c-.242.784-1.366 1.14-2.499.807c-1.13-.343-1.871-1.26-1.642-2.052c.235-.788 1.364-1.159 2.505-.803c1.13.341 1.871 1.252 1.636 2.048m8.394.932c.028.824-.932 1.508-2.121 1.523c-1.196.027-2.163-.641-2.176-1.452c0-.833.939-1.51 2.134-1.53c1.19-.023 2.163.639 2.163 1.459m8.246-.316c.143.804-.683 1.631-1.864 1.851c-1.161.212-2.236-.285-2.383-1.083c-.144-.825.697-1.651 1.856-1.865c1.183-.205 2.241.279 2.391 1.097"/></g></svg>
+                              </a>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Γεώργιος Τζατζανάς</td>
+                            <td>Pixel Artist</td>
+                            <td class="links">
+                              <a href="https://www.linkedin.com/in/" target="_blank" rel="noopener noreferrer">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 128 128"><path fill="#0076b2" d="M116 3H12a8.91 8.91 0 0 0-9 8.8v104.42a8.91 8.91 0 0 0 9 8.78h104a8.93 8.93 0 0 0 9-8.81V11.77A8.93 8.93 0 0 0 116 3"/><path fill="#fff" d="M21.06 48.73h18.11V107H21.06zm9.06-29a10.5 10.5 0 1 1-10.5 10.49a10.5 10.5 0 0 1 10.5-10.49m20.41 29h17.36v8h.24c2.42-4.58 8.32-9.41 17.13-9.41C103.6 47.28 107 59.35 107 75v32H88.89V78.65c0-6.75-.12-15.44-9.41-15.44s-10.87 7.36-10.87 15V107H50.53z"/></svg>
+                              </a>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Δημήτριος Hila</td>
+                            <td>Photographer</td>
+                            <td class="links">
+                              <a href="https://www.linkedin.com/in/" target="_blank" rel="noopener noreferrer">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 128 128"><path fill="#0076b2" d="M116 3H12a8.91 8.91 0 0 0-9 8.8v104.42a8.91 8.91 0 0 0 9 8.78h104a8.93 8.93 0 0 0 9-8.81V11.77A8.93 8.93 0 0 0 116 3"/><path fill="#fff" d="M21.06 48.73h18.11V107H21.06zm9.06-29a10.5 10.5 0 1 1-10.5 10.49a10.5 10.5 0 0 1 10.5-10.49m20.41 29h17.36v8h.24c2.42-4.58 8.32-9.41 17.13-9.41C103.6 47.28 107 59.35 107 75v32H88.89V78.65c0-6.75-.12-15.44-9.41-15.44s-10.87 7.36-10.87 15V107H50.53z"/></svg>
+                              </a>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Παύλος Δρατζίδης</td>
+                            <td>Photography Support</td>
+                            <td class="links">
+                              <a href="https://www.linkedin.com/in/" target="_blank" rel="noopener noreferrer">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 128 128"><path fill="#0076b2" d="M116 3H12a8.91 8.91 0 0 0-9 8.8v104.42a8.91 8.91 0 0 0 9 8.78h104a8.93 8.93 0 0 0 9-8.81V11.77A8.93 8.93 0 0 0 116 3"/><path fill="#fff" d="M21.06 48.73h18.11V107H21.06zm9.06-29a10.5 10.5 0 1 1-10.5 10.49a10.5 10.5 0 0 1 10.5-10.49m20.41 29h17.36v8h.24c2.42-4.58 8.32-9.41 17.13-9.41C103.6 47.28 107 59.35 107 75v32H88.89V78.65c0-6.75-.12-15.44-9.41-15.44s-10.87 7.36-10.87 15V107H50.53z"/></svg>
+                              </a>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Πατρίτσιο Ταμπάκου</td>
+                            <td>Tester</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+                <div class="btn-wrapper">
+                  <div class="start button" onclick="switchto('credits', 'menu')">Back</div>
+                </div>
+            </div>
+
+            <div class="slideshow-container">
+
+                <!-- Full-width images with number and caption text -->
+                <div class="mySlides fade">
+                    <img src="./assets/0-0-0.jpg" style="width:100%">
+                </div>
+              
+                <div class="mySlides fade">
+                    <img src="./assets/1-0-0.jpg" style="width:100%">
+                </div>
+              
+                <div class="mySlides fade">
+                    <img src="./assets/2-0-0.jpg" style="width:100%">
+                </div>
+
+                <div class="mySlides fade">
+                    <img src="./assets/0-2-0.jpg" style="width:100%">
+                </div>
+
+                <div class="mySlides fade">
+                    <img src="./assets/2-2-0.jpg" style="width:100%">
+                </div>
+
+                <div class="mySlides fade">
+                    <img src="./assets/3-2-0.jpg" style="width:100%">
+                </div>
+
+                <div class="mySlides fade">
+                    <img src="./assets/4-2-0.jpg" style="width:100%">
+                </div>
+
+                <div class="mySlides fade">
+                    <img src="./assets/5-2-0.jpg" style="width:100%">
+                </div>
+
+                <div class="mySlides fade">
+                    <img src="./assets/6-2-0.jpg" style="width:100%">
+                </div>
+
+                <div class="mySlides fade">
+                    <img src="./assets/3-3-0.jpg" style="width:100%">
+                </div>
+              </div>
+        </div>
+        
+        <!-- Top floor -->
+        <!-- 0-0-0 -->
+        <div id="0-0-0" class="street"
+        data-right="0-2-0" data-right-animate="slideright"
+        data-left="0-3-0" data-left-animate="slideleft"
+        data-center="6-2-0" data-center-offset="-6vw, 26vw" data-center-animate="left"
+        data-bottom="1-0-0" data-bottom-offset="15vw, -17vw" data-bottom-animate="right"
+
+        data-hover_1-text="Γραφεία Καθηγητών" data-hover-text-offset_1="-1vw,5vw" data-hover-hitbox-offset_1="-7vw,1vw"
+
+        data-hover_2-text="Γραφεία 1ου ΣΕΚ Νεάπολης" data-hover-text-offset_2="-1vw,17vw" data-hover-hitbox-offset_2="-7vw,8vw"
+
+        data-hover_3-text="Γραφεία 1ου ΕΠΑΛ Νεάπολης" data-hover-text-offset_3="-1vw,24vw" data-hover-hitbox-offset_3="-7vw,14.5vw"
+
+        data-hover_4-text="Γραφεία 1ου ΕΠΑΛ Νεάπολης" data-hover-text-offset_4="-1vw,-5.5vw" data-hover-hitbox-offset_4="-7vw,-5.5vw"
+
+        data-imgobj_1=".\\assets\\shinji-sitting.png" data-imgobj-onclick_1="dialog_ShinjiSitting()" data-imgobj-offset_1="-27vw,25.5vw" data-imgobj-size_1="4.55vw,3.35vw"
+        >
+        </div>
+
+        <div id="0-1-0" class="street"
+        data-left="0-2-0" data-left-animate="slideleft"
+        data-right="0-3-0" data-right-animate="slideright"
+        data-bottom="0-0-0"
+        >
+        </div>
+
+        <div id="0-2-0" class="street"
+        data-left="0-0-0" data-left-animate="slideleft"
+        data-right="0-1-0" data-right-animate="slideright"
+        data-bottom="0-3-0"
+        >
+        </div>
+
+        <div id="0-3-0" class="street"
+        data-left="0-1-0" data-left-animate="slideleft"
+        data-right="0-0-0" data-right-animate="slideright"
+        data-bottom="0-2-0"
+        >
+        </div>
+        <!-- - - - -->
+        
+        <!-- 1-0-0 -->
+        <div id="1-0-0" class="street"
+        data-bottom="1-1-0" 
+        data-center="2-1-0" data-center-offset="-9vw"
+
+        data-imgobj_1=".\\assets\\rei-sitting.png" data-imgobj-offset_1="-26vw,5vw" data-imgobj-size_1="4vw,2vw"
+        >
+        </div>
+        <div id="1-1-0" class="street"
+        data-bottom="1-0-0" data-center-offset="-3vw, 3vw"
+        data-center="6-1-0"
+        data-left="0-0-0" data-left-offset="-12.5vw,-14vw"
+        >
+        </div>
+        <!-- - - - -->
+        
+        <!-- 2-0-0 -->
+        <div id="2-0-0" class="street"
+        data-left="2-1-0" data-left-animate="slideleft"
+        data-right="2-3-0" data-right-animate="slideright"
+        data-bottom="2-2-0"
+        >
+        </div>
+        <div id="2-1-0" class="street"
+        data-center="2-3-1" data-center-offset="0vw, 10vw"
+        data-left="2-2-0" data-left-animate="slideleft"
+        data-right="2-0-0" data-right-animate="slideright"
+        data-bottom="2-3-0"
+
+        data-imgobj_1=".\\assets\\rei-sitting.png" data-imgobj-onclick_1="dialog_ReiSitting()" data-imgobj-offset_1="-23vw,-5vw" data-imgobj-size_1="18vw,8vw"
+        >
+        </div>
+        <div id="2-2-0" class="street"
+        data-center="3-0-0" data-center-offset="-10vw, 3vw"
+        data-left="2-3-0" data-left-animate="slideleft"
+        data-right="2-1-0" data-right-animate="slideright"
+        data-bottom="2-0-0"
+        >
+        </div>
+        <div id="2-3-0" class="street"
+        data-center="1-1-0" data-center-offset="-7vw, 5vw "
+        data-left="2-0-0" data-left-animate="slideleft"
+        data-right="2-2-0" data-right-animate="slideright"
+        data-bottom="2-1-0"
+        >
+        </div>
+        <!-- - - - -->
+
+        <!-- 3-0-0 -->
+        <div id="3-0-0" class="street"
+        data-left="3-1-0" data-left-animate="slideleft"
+        data-right="3-3-0" data-right-animate="slideright"
+        data-center="class" data-center-offset="0, -10vw"
+
+        data-hover_1-text="Αίθουσες με υπολογιστές, εργαστήρια πληροφορικής."
+        data-hover-text-offset_1="-5vw,17vw" data-hover-hitbox-offset_1="-20vw,-4vw" data-hover-hitbox-size_1="16vw,6vw"
+        >
+        </div>
+        <div id="3-1-0" class="street"
+        data-center="4-1-0" data-center-offset="-5vw, 3vw"
+        data-left="3-2-0" data-left-animate="slideleft"
+        data-right="3-0-0" data-right-animate="slideright"
+        >
+        </div>
+        <div id="3-2-0" class="street"
+        data-center="2-0-0" data-center-offset="-5vw, -5vw"
+        data-left="3-3-0" data-left-animate="slideleft"
+        data-right="3-1-0" data-right-animate="slideright"
+        >
+        </div>
+        <div id="3-3-0" class="street"
+        data-center="3-1-1" data-center-offset="-5vw, 10vw"
+        data-left="3-0-0" data-left-animate="slideleft"
+        data-right="3-2-0" data-right-animate="slideright"
+        >
+        </div>
+        <!-- - - - -->
+        
+        <!-- 4-0-0 -->
+        <div id="4-0-0" class="street"
+        data-left="4-1-0" data-left-animate="slideleft"
+        data-right="4-3-0" data-right-animate="slideright"
+        >
+        </div>
+        <div id="4-1-0" class="street"
+        data-center="4-3-1" data-center-offset="-3vw, 7.5vw"
+        data-left="4-2-0" data-left-animate="slideleft"
+        data-right="4-0-0" data-right-animate="slideright"
+        >
+        </div>
+        <div id="4-2-0" class="street"
+        data-center="5-1-0" data-center-offset="2vw, 4.25vw"
+        data-left="4-3-0" data-left-animate="slideleft"
+        data-right="4-1-0" data-right-animate="slideright"
+        >
+        </div>
+        <div id="4-3-0" class="street"
+        data-center="3-3-0" data-center-offset="-8vw, 5vw"
+        data-left="4-0-0" data-left-animate="slideleft"
+        data-right="4-2-0" data-right-animate="slideright"
+        data-top="7-0-0" data-top-offset="-15vw, 30vw"
+        >
+        </div>
+        <!-- - - - -->
+
+        <!-- 5-0-0 -->
+        <div id="5-0-0" class="street"
+        data-left="5-1-0" data-left-animate="slideleft"
+        data-right="5-2-0" data-right-animate="slideright"
+        >
+        </div>
+        <div id="5-1-0" class="street"
+        data-center="6-0-0" data-center-offset="1.25vw, 4vw"
+        data-bottom="5-2-0"
+        data-right="5-0-0" data-right-animate="slideright"
+
+        data-imgobj_1=".\\assets\\shinji-sitting-r.png" data-imgobj-onclick_1="dialog_ShinjiSitting()" data-imgobj-offset_1="-26.25vw,6.75vw" data-imgobj-size_1="5.5vw,4.02vw"
+        >
+        </div>
+        <div id="5-2-0" class="street"
+        data-center="4-0-0" data-center-offset="0vw,1.5vw"
+        data-bottom="5-1-0"
+        data-left="5-0-0" data-left-animate="slideleft"
+        >
+        </div>
+        <!-- - - - -->
+
+        <!-- 6-0-0 -->
+        <div id="6-0-0" class="street"
+        data-center="1-0-0" data-center-offset="-7vw, 7vw"
+        data-bottom="6-1-0"
+        data-left="6-2-0" data-left-animate="slideleft"
+        data-right="0-0-0" data-right-offset="-10vw, 9vw"
+
+        data-imgobj_1=".\\assets\\rei-sitting.png" data-imgobj-offset_1="-26.25vw,9vw" data-imgobj-size_1="2vw,1vw"
+        >
+        </div>
+        <div id="6-1-0" class="street"
+        data-center="6-0-1" data-center-offset="-5vw, 11vw"
+        data-bottom="6-0-0"
+        data-right="6-2-0" data-right-animate="slideright"
+        >
+        </div>
+        <div id="6-2-0" class="street"
+        data-center="5-2-0" data-center-offset="2vw, 1.5vw"
+        data-right="6-0-0" data-right-animate="slideright"
+        data-left="6-1-0" data-left-animate="slideleft"
+
+        data-imgobj_1=".\\assets\\shinji-sitting.png" data-imgobj-onclick_1="dialog_ShinjiSitting()" data-imgobj-offset_1="-27vw,11vw" data-imgobj-size_1="10.94vw,8.02vw"
+        >
+        </div>
+        
+        
+        <div id="7-0-0" class="street"
+        data-bottom="4-3-0"
+        >
+        </div>
+        
+
+        
+        <div id="class" class="street"
+        data-bottom="3-0-0"
+        data-imgobj_1=".\\assets\\monster.png" data-imgobj-onclick_1="dialog_Boss()" data-imgobj-offset_1="-20vw,-20vw" data-imgobj-size_1="18vw,33vw"
+        >
+        </div>
+
+        <!-- - - - - - - - -->
+        <!-- Bottom floor  -->
+        <!-- - - - - - - - -->
+
+        <!-- 1-0-1 -->
+        <div id="1-0-1" class="street"
+        data-center="2-1-1" data-center-offset="-5vw"
+        data-bottom="1-1-1"
+        >
+        </div>  
+        <div id="1-1-1" class="street"
+        data-center="6-1-1"
+        data-bottom="1-0-1"
+        >
+        </div>
+        <!-- 2-0-1 -->
+        <div id="2-0-1" class="street"
+        data-left="2-1-1" data-left-animate="slideleft"
+        data-right="2-3-1" data-right-animate="slideright"
+        >
+        </div>
+        <div id="2-1-1" class="street"
+        data-center="2-3-0" data-center-offset="5vw,-4vw"
+        data-left="2-2-1" data-left-animate="slideleft"
+        data-right="2-0-1" data-right-animate="slideright"
+        >
+        </div>
+        <div id="2-2-1" class="street"
+        data-center="3-0-1" data-center-offset="-5vw,2vw"
+        data-left="2-3-1" data-left-animate="slideleft"
+        data-right="2-1-1" data-right-animate="slideright"
+        >
+        </div>
+        <div id="2-3-1" class="street"
+        data-center="1-1-1" data-center-offset="-2vw,2vw"
+        data-left="2-0-1" data-left-animate="slideleft"
+        data-right="2-2-1" data-right-animate="slideright"
+        >
+        </div>
+
+        <!-- 3-0-1 -->
+        <div id="3-0-1" class="street"
+        data-left="3-1-1" data-left-animate="slideleft"
+        data-right="3-3-1" data-right-animate="slideright"
+        >
+        </div>  
+        <div id="3-1-1" class="street"
+        data-center="4-1-1"
+        data-left="3-2-1" data-left-animate="slideleft"
+        data-right="3-0-1" data-right-animate="slideright"
+        >
+        </div>  
+        <div id="3-2-1" class="street"
+        data-center="2-0-1" data-center-offset="-4vw,1vw"
+        data-left="3-3-1" data-left-animate="slideleft"
+        data-right="3-1-1" data-right-animate="slideright"
+        >
+        </div>
+        <div id="3-3-1" class="street"
+        data-center="3-1-0" data-center-offset="4vw,-3vw"
+        data-left="3-0-1" data-left-animate="slideleft"
+        data-right="3-2-1" data-right-animate="slideright"
+        >
+        </div>  
+
+        <!-- 4-0-1 -->
+        <div id="4-0-1" class="street"
+        data-left="4-1-1" data-left-animate="slideleft"
+        data-right="4-3-1" data-right-animate="slideright"
+        >
+        </div>
+        <div id="4-1-1" class="street"
+        data-center="4-3-0" data-center-offset="5vw,-2vw"
+        data-left="4-2-1" data-left-animate="slideleft"
+        data-right="4-0-1" data-right-animate="slideright"
+        >
+        </div>
+        <div id="4-2-1" class="street"
+        data-center="5-1-1"  data-center-offset="0vw,3vw"
+        data-left="4-3-1" data-left-animate="slideleft"
+        data-right="4-1-1" data-right-animate="slideright"
+        >
+        </div>
+        <div id="4-3-1" class="street"
+        data-center="3-3-1" data-center-offset="-5vw,0vw"
+        data-left="4-0-1" data-left-animate="slideleft"
+        data-right="4-2-1" data-right-animate="slideright"
+        >
+        </div>
+
+        <!-- 5-0-1 -->
+        <div id="5-0-1" class="street"
+        data-left="5-1-1" data-left-animate="slideleft"
+        data-right="5-2-1" data-right-animate="slideright"
+        >
+        </div>
+        <div id="5-1-1" class="street"
+        data-center="6-1-1" data-center-offset="-5vw,3vw"
+        data-left="5-3-1" data-left-animate="slideleft"
+        data-right="5-0-1" data-right-animate="slideright"
+        >
+        </div>
+        <div id="5-2-1" class="street"
+        data-center="4-0-1" data-center-offset="-8vw,1vw"
+        data-left="5-0-1" data-left-animate="slideleft"
+        data-right="5-3-1" data-right-animate="slideright"
+        >
+        </div>
+        <div id="5-3-1" class="street"
+        data-left="5-2-1" data-left-animate="slideleft"
+        data-right="5-1-1" data-right-animate="slideright"
+        >
+        </div>
+
+        <!-- 6-0-1 -->
+        <div id="6-0-1" class="street"
+        data-center="1-0-1" data-center-offset="-2vw, 2vw"
+        data-bottom="6-1-1"
+        data-left="6-2-1" data-left-animate="slideleft"
+        data-right="6-3-1" data-right-animate="slideright"
+        >
+        </div>
+        <div id="6-1-1" class="street"
+        data-center="6-0-0"
+        data-left="6-3-1" data-left-animate="slideleft"
+        data-right="6-2-1" data-right-animate="slideright"
+        >
+        </div>
+        <div id="6-2-1" class="street"
+        data-center="5-2-1" data-center-offset="0vw, 2vw"
+        data-left="6-1-1" data-left-animate="slideleft"
+        data-right="6-0-1" data-right-animate="slideright"
+        >
+        </div>
+        <div id="6-3-1" class="street"
+        data-left="6-0-1" data-left-animate="slideleft"
+        data-right="6-1-1" data-right-animate="slideright"
+        >
+        </div>
+
+        <!-- 7-0-1 -->
+        <div id="7-0-1" class="street"
+        >
+        </div>
+    </div>
+</body>
+<script src="index.js"></script> 
+<script>
+
+//rightclick
+document.addEventListener('contextmenu', e => e.preventDefault());
+
+// Add animationend event listener to transitionScreen
+document.getElementById('transitionScreen').addEventListener('animationend', () => {
+    document.getElementById('transitionScreen').remove()
+});
+
+//slideshow
+
+let slideIndex = 0;
+showSlides();
+
+function showSlides() {
+  if (document.getElementById("menu")) {
+    let i;
+    let slides = document.getElementsByClassName("mySlides");
+    for (i = 0; i < slides.length; i++) {
+      slides[i].style.opacity = "0";
+    }
+    slideIndex++;
+    if (slideIndex > slides.length) {slideIndex = 1}
+    slides[slideIndex-1].style.opacity = "1";
+    setTimeout(showSlides, 3000); // Change image every 2 seconds
+  }
+}
+</script>
+</html>

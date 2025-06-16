@@ -19,22 +19,21 @@ let publicItem;
 let publicDialogImageClicked;
 let publicImg;
 let publicTxt;
-let isAnimating = false; // prevent animation spamming
+let isAnimating = false;
+
+// public options
+const uOptions = {
+    animations: true,
+};
 
 
 // Cookies
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year in seconds
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
 document.addEventListener('DOMContentLoaded', () => {
   const match = document.cookie.match('(?:^|; )street=([^;]*)');
   street = match ? decodeURIComponent(match[1]) : street;
   document.cookie = `street=${encodeURIComponent(street)};path=/;max-age=${COOKIE_MAX_AGE}`;
-});
-// Erase cookie on 'R' key press
-document.addEventListener('keydown', e => {
-if (e.key.toLowerCase() === 'r' && e.shiftKey) {
-    document.cookie = 'street=;path=/;max-age=0';
-}
 });
 
 
@@ -43,19 +42,19 @@ setTimeout(() => {
     document.getElementById('transitionScreen').classList.add('fadeout');
 }, 200);
 const startGame = () => {
-    const mainstreet = document.getElementById(street)
-    const startscreen = document.getElementById('start')
-    const debugtext = document.getElementById('debug_text')
-    startscreen.remove();
-    mainstreet.style.display = "block"
-    debugtext.style.display = "block"
+    const mainstreet = document.getElementById(street);
+    const debugtext = document.getElementById('debug_text');
+
+    mainstreet.style.display = "block";
+    debugtext.style.display = "block";
+
+    toggleMenu();
+    
     generateArrows(mainstreet);
 }
 
-const switchto = (from, to) => {
-    document.getElementById(from).style.display = 'none'
-    document.getElementById(to).style.display = 'flex'
-}
+
+// Generate Requested Objects
 
 const generateArrows = (item) => {
 
@@ -201,26 +200,33 @@ const generateArrows = (item) => {
     }
 }
 
+// Move to street
 const moveToStreet = (from, to, key) => {
-    if (isAnimating) return; // Prevent spamming
-    isAnimating = true;
+    if (uOptions.animations) {
+        if (isAnimating) return; // Prevent spamming
+        isAnimating = true;
 
-    to.style.display = 'block';
-    to.style.zIndex = '0';
-    
-    from.style.zIndex = '999999999';
+        to.style.display = 'block';
+        to.style.zIndex = '0';
+        
+        from.style.zIndex = '999999999';
 
-    let fadeDirection = from.dataset[`${key}Animate`] ? from.dataset[`${key}Animate`] : key;
+        let fadeDirection = from.dataset[`${key}Animate`] ? from.dataset[`${key}Animate`] : key;
 
-    from.classList.add(`animate${fadeDirection}`);
-    from.addEventListener('animationend', function handler() {
+        from.classList.add(`animate${fadeDirection}`);
+        from.addEventListener('animationend', function handler() {
+            from.style.display = 'none';
+            from.classList.remove(`animate${fadeDirection}`);
+            from.removeEventListener('animationend', handler);
+            from.style.zIndex = '0';
+            clearObjects();
+            isAnimating = false; // Allow next animation
+        });
+    } else {
         from.style.display = 'none';
-        from.classList.remove(`animate${fadeDirection}`);
-        from.removeEventListener('animationend', handler);
-        from.style.zIndex = '0';
         clearObjects();
-        isAnimating = false; // Allow next animation
-    });
+        to.style.display = 'block';
+    }
 
     street = to.id;
     document.cookie = `street=${encodeURIComponent(street)};path=/;max-age=${COOKIE_MAX_AGE}`;
@@ -230,10 +236,11 @@ const moveToStreet = (from, to, key) => {
     document.getElementById('debug_text').innerHTML=street;
 }
 
+
+// Clear all Objects
 const clearObjects = () => {
     const currentStreet = document.getElementById(street);
 
-    // Remove all arrows not under the current street
     const allArrows = document.getElementsByClassName('arrow');
     for (let i = allArrows.length - 1; i >= 0; i--) {
         if (!currentStreet.contains(allArrows[i])) {
@@ -241,7 +248,6 @@ const clearObjects = () => {
         }
     }
 
-    // Remove all imgobj not under the current street
     const allimgobj = document.getElementsByClassName('imgobj');
     for (let i = allimgobj.length - 1; i >= 0; i--) {
         if (!currentStreet.contains(allimgobj[i])) {
@@ -249,7 +255,6 @@ const clearObjects = () => {
         }
     }
 
-    // Remove all dialog_hover not under the current street
     const allhover = document.getElementsByClassName('dialog_hover');
     for (let i = allhover.length - 1; i >= 0; i--) {
         if (!currentStreet.contains(allhover[i])) {
@@ -270,16 +275,65 @@ function checkAspectRatio() {
         warning.style.display = 'none';
     }
 }
+
+
+// Detect resize
+window.addEventListener('resize', () => {
+    const currentStreet = document.getElementById(street);
+    if (!currentStreet || currentStreet.style.display === 'none') return;
+
+    ['.arrow', '.imgobj', '.dialog_hover'].forEach(selector => {
+        currentStreet.querySelectorAll(selector).forEach(el => el.remove());
+    });
+
+    generateArrows(document.getElementById(street));
+});
+
 window.addEventListener('resize', checkAspectRatio);
 window.addEventListener('DOMContentLoaded', checkAspectRatio);
 setInterval(checkAspectRatio, 1000);
 
 
+// - - - MENU - - - //
+
+const toggleMenu = () => {
+    const startscreen = document.getElementById('start')
+
+    if (startscreen.style.display !== "none" || startscreen.style.display === "") {
+        startscreen.style.display = "none";
+        startscreen.style.opacity = "0";
+        startscreen.style.pointerEvents = "none";
+    } else {
+        startscreen.style.display = "";
+        startscreen.style.opacity = "";
+        startscreen.style.pointerEvents = "";
+    }
+}
+
+const switchto = (from, to) => {
+    document.getElementById(from).style.display = 'none'
+    document.getElementById(to).style.display = 'flex'
+}
+
+function options(option, el) {
+    if (option === 'animations') {
+        uOptions.animations = !uOptions.animations;
+        el.textContent = uOptions.animations ? 'Animations ON' : 'Animations OFF';
+    }
+}
 
 
+// - - - KEY HANDLES - - - //
+document.addEventListener('keydown', e => {
+if (e.key.toLowerCase() === 'r' && e.shiftKey) {
+    document.cookie = 'street=;path=/;max-age=0';
+}});
 
-
-
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+        toggleMenu();
+    }
+});
 
 
 

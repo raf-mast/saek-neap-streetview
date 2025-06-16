@@ -355,12 +355,12 @@ html {
 
     #start {
 
-        #menu, #credits {
+        #menu, #credits, #options {
             backdrop-filter: blur(7px);
 
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 25px;
 
             position: fixed;
             top: 0;
@@ -375,6 +375,14 @@ html {
             aspect-ratio: 1920 / 1080;
 
             overflow: hidden;
+        }
+        
+        #menu {
+            flex-direction: column;
+        }
+
+        #options {
+            display: none;
         }
 
         #credits {
@@ -407,6 +415,34 @@ html {
             }
         }
 
+        .btn-wrapper {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 12.5px;
+
+            width: fit-content;
+
+            .button {
+                cursor: pointer;
+
+                color: white;
+                
+                font-size: 17.5px;
+
+                background-color: black;
+                outline: solid 2px white;
+                border-radius: 7.5px;
+
+                padding: 6px 20px;
+
+                width: 100%;
+
+                text-align: center;
+            }
+        }
+
         .text {
             color: white;
 
@@ -425,20 +461,6 @@ html {
             padding: 10px;
 
             margin-bottom: 25px;
-        }
-
-        .button {
-            cursor: pointer;
-
-            color: white;
-            
-            font-size: 17.5px;
-
-            background-color: black;
-            outline: solid 2px white;
-            border-radius: 7.5px;
-
-            padding: 5px;
         }
         
 
