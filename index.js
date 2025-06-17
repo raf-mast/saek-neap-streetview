@@ -431,18 +431,35 @@ const dialog_Txt = (name, text, top, left, item, choices) => {
     // name div
     const nameDiv = document.createElement('div');
     nameDiv.classList.add('name');
-    // Add SVG icon before the name text
-    nameDiv.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path fill="currentColor" fill-opacity="0" stroke-dasharray="72" stroke-dashoffset="72" d="M3 19.5v-15.5c0 -0.55 0.45 -1 1 -1h16c0.55 0 1 0.45 1 1v12c0 0.55 -0.45 1 -1 1h-14.5Z"><animate fill="freeze" attributeName="fill-opacity" begin="0.7s" dur="0.15s" values="0;0.3"/><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s" values="72;0"/></path><path stroke-dasharray="10" stroke-dashoffset="10" d="M8 7h8"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.85s" dur="0.2s" values="10;0"/></path><path stroke-dasharray="10" stroke-dashoffset="10" d="M8 10h8"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1.15s" dur="0.2s" values="10;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M8 13h4"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1.45s" dur="0.2s" values="6;0"/></path></g></svg>
-    <p>${name}</p>`;
+    nameDiv.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+          <path fill="currentColor" fill-opacity="0" stroke-dasharray="72" stroke-dashoffset="72" d="M3 19.5v-15.5c0 -0.55 0.45 -1 1 -1h16c0.55 0 1 0.45 1 1v12c0 0.55 -0.45 1 -1 1h-14.5Z">
+            <animate fill="freeze" attributeName="fill-opacity" begin="0.7s" dur="0.15s" values="0;0.3"/>
+            <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s" values="72;0"/>
+          </path>
+          <path stroke-dasharray="10" stroke-dashoffset="10" d="M8 7h8">
+            <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.85s" dur="0.2s" values="10;0"/>
+          </path>
+          <path stroke-dasharray="10" stroke-dashoffset="10" d="M8 10h8">
+            <animate fill="freeze" attributeName="stroke-dashoffset" begin="1.15s" dur="0.2s" values="10;0"/>
+          </path>
+          <path stroke-dasharray="6" stroke-dashoffset="6" d="M8 13h4">
+            <animate fill="freeze" attributeName="stroke-dashoffset" begin="1.45s" dur="0.2s" values="6;0"/>
+          </path>
+        </g>
+      </svg>
+      <p>${name}</p>
+    `;
     newObj.appendChild(nameDiv);
     
     // text div
     const newText = document.createElement('div');
     newText.classList.add('text');
-    newText.appendChild(document.createTextNode(text));
+    newText.textContent = text;
     newObj.appendChild(newText);
 
-    // click to continue
+    // click to continue (if no choices)
     if (!choices || choices.length === 0) {
         const clickToContinue = document.createElement('span');
         clickToContinue.classList.add('clickTo');
@@ -454,30 +471,43 @@ const dialog_Txt = (name, text, top, left, item, choices) => {
     if (choices && choices.length > 0) {
         const choicesDiv = document.createElement('div');
         choicesDiv.classList.add('choices');
-        choices.forEach(choice => {
+        choices.forEach(([btnText, action]) => {
             const choiceButton = document.createElement('button');
-            choiceButton.textContent = choice;
-            choiceButton.addEventListener('click', (function(copy) {
+            choiceButton.textContent = btnText;
+            // capture both the dialog node and the action
+            choiceButton.addEventListener('click', (function(copy, actionStr) {
                 return function() {
-                    const cover = document.getElementById('cover');// declared after click
+                    // first, dispatch the cover click as before
+                    const cover = document.getElementById('cover');
                     cover.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-                }
-            })(newObj));
+                    // then, if an action was provided, execute it
+                    if (actionStr) {
+                        // e.g. "dialog_Boss_FINISH()"
+                        try {
+                            eval(actionStr);
+                        } catch (err) {
+                            console.error('Error executing action:', actionStr, err);
+                        }
+                    }
+                };
+            })(newObj, action));
             choicesDiv.appendChild(choiceButton);
         });
         newObj.appendChild(choicesDiv);
     }
 
-
+    // add to container
     item.appendChild(newObj);
 
+    // position adjustment
     (function(copy) {
         copy.style.top = `calc(${window.getComputedStyle(copy).top} - ${top})`;
         copy.style.left = `calc(${window.getComputedStyle(copy).left} - ${left})`;
     })(newObj);
 
     return newObj;
-}
+};
+
 
 
 // Func Dialogues
@@ -523,10 +553,132 @@ const dialog_ReiSitting = () => {
 const dialog_Boss = () => {
     publicDialogImageClicked.style.display = "none"
     const img = dialog_Img("./assets/monster.png", "25vw", "40vw", "-20vw", "-10vw", "normal", publicItem);
-    const txt = dialog_Txt("Xatziarapis", "Oh? You're Approaching Me?", "-40vw", "-40vw", publicItem, ["Nah"]);
+    const txt = dialog_Txt("Xatziarapis", "Oh? You're Approaching Me?", "-40vw", "-40vw", publicItem, [["Nah", null],["Use your super power on him", 'dialog_Boss_FINISH()']]);
 
     dialog_Cover(publicItem, [img, txt], '', publicDialogImageClicked)
 }
 
+const dialog_Boss_FINISH = () => {
+    //publicDialogImageClicked.style.display = "none";
 
+    const beamImg = dialog_Img("./assets/beam.png", "40vw", "30vw", "-20vw", "-10vw", "normal", publicItem);
 
+    const handImg = dialog_Img("./assets/hand.png", "60vw", "50vw", "-15vw", "-10vw", "normal", publicItem);
+
+    beamImg.style.opacity = '0';
+    setTimeout(() => {
+        beamImg.style.transition = 'opacity 1.5s';
+        beamImg.style.opacity = '1';
+    }, 100);
+
+    // Play sound and then show fullscreen transition
+    const audio = new Audio('./assets/beam-sfx.mp3');
+    audio.play();
+    audio.addEventListener('ended', () => {
+        // fullscreen transition
+        const transitionScreen = document.createElement('div');
+        transitionScreen.style.position = 'fixed';
+        transitionScreen.style.top = '0';
+        transitionScreen.style.left = '0';
+        transitionScreen.style.width = '100vw';
+        transitionScreen.style.height = '100vh';
+        transitionScreen.style.background = 'white';
+        transitionScreen.style.opacity = '0';
+        transitionScreen.style.zIndex = '999999';
+        transitionScreen.style.transition = 'opacity 1s';
+        document.body.appendChild(transitionScreen);
+        setTimeout(() => {
+            transitionScreen.style.opacity = '1';
+            // After transition finishes, wait 3 seconds, then play video
+            setTimeout(() => {
+                const video = document.createElement('video');
+                video.src = './assets/omedetou.mp4';
+                video.style.position = 'fixed';
+                video.style.top = '0';
+                video.style.left = '0';
+                video.style.width = '100vw';
+                video.style.height = '100vh';
+                video.style.objectFit = 'cover';
+                video.style.zIndex = '1000000';
+                video.autoplay = true;
+                video.controls = false;
+                video.loop = false;
+                video.muted = false;
+                document.body.appendChild(video);
+                video.requestFullscreen?.();
+                video.addEventListener('ended', () => {
+                    // Show black screen with credits scroll
+                    const winScreen = document.createElement('div');
+                    winScreen.style.position = 'fixed';
+                    winScreen.style.top = '0';
+                    winScreen.style.left = '0';
+                    winScreen.style.width = '100vw';
+                    winScreen.style.height = '100vh';
+                    winScreen.style.background = 'black';
+                    winScreen.style.zIndex = '1000001';
+                    winScreen.style.overflow = 'hidden';
+                    winScreen.style.display = 'flex';
+                    winScreen.style.alignItems = 'center';
+                    winScreen.style.justifyContent = 'center';
+                    winScreen.style.flexDirection = 'column';
+
+                    // Credits container
+                    const creditsContainer = document.createElement('div');
+                    creditsContainer.style.position = 'absolute';
+                    creditsContainer.style.left = '0';
+                    creditsContainer.style.width = '100vw';
+                    creditsContainer.style.display = 'flex';
+                    creditsContainer.style.flexDirection = 'column';
+                    creditsContainer.style.alignItems = 'center';
+
+                    // Credits content
+                    const creditsContent = document.createElement('div');
+                    creditsContent.style.color = 'white';
+                    creditsContent.style.fontSize = '4vw';
+                    creditsContent.style.fontWeight = 'bold';
+                    creditsContent.style.textAlign = 'center';
+                    creditsContent.innerHTML = `
+                        <div style="font-size:6vw;margin-bottom:2vw;">You Won</div>
+                        <div style="margin-top:8vw;">CREDITS</div>
+                        <div style="margin-top:2vw;">Ραφαήλ</div>
+                        <div>Λεονίς</div>
+                        <div>Γεώργιος</div>
+                        <div>Δημήτριος</div>
+                        <div>Παύλος</div>
+                    `;
+                    creditsContainer.appendChild(creditsContent);
+                    winScreen.appendChild(creditsContainer);
+                    document.body.appendChild(winScreen);
+
+                    // Animate scroll: start from bottom, move up, stop at 25% from top
+                    let start = null;
+                    const duration = 12000; // 12 seconds for scroll
+                    const stopAt = 0; // Stop when credits reach 25% from top
+                    // Get credits height after adding to DOM
+                    setTimeout(() => {
+                        const creditsHeight = creditsContainer.offsetHeight;
+                        const startY = window.innerHeight;
+                        const stopY = window.innerHeight * stopAt;
+                        function animateCreditsScroll(ts) {
+                            if (!start) start = ts;
+                            const elapsed = ts - start;
+                            const percent = Math.min(elapsed / duration, 1);
+                            // Move from bottom (startY) to stopY
+                            const currentY = startY - (startY - stopY) * percent;
+                            creditsContainer.style.top = `${currentY}px`;
+                            creditsContainer.style.bottom = '';
+                            if (percent < 1) {
+                                requestAnimationFrame(animateCreditsScroll);
+                            } else {
+                                // Stop at final position
+                                creditsContainer.style.top = `${stopY}px`;
+                            }
+                        }
+                        creditsContainer.style.top = `${startY}px`;
+                        requestAnimationFrame(animateCreditsScroll);
+                    }, 0);
+                });
+            }, 3000);
+        }, 1000); // Wait for transition (opacity 1s)
+    });
+}
