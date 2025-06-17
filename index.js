@@ -565,15 +565,16 @@ const dialog_Boss_FINISH = () => {
 
     const handImg = dialog_Img("./assets/hand.png", "60vw", "50vw", "-15vw", "-10vw", "normal", publicItem);
 
-    beamImg.style.opacity = '0.1';
-    setTimeout(() => {
-        beamImg.style.transition = 'opacity 1.5s';
-        beamImg.style.opacity = '1';
-    }, 100);
-
     // Play sound and then show fullscreen transition
     const audio = new Audio('./assets/beam-sfx.mp3');
-    audio.play();
+
+    beamImg.style.opacity = '0.05';
+    setTimeout(() => {
+        beamImg.style.transition = 'opacity 5s';
+        beamImg.style.opacity = '1';
+        audio.play();
+    }, 500);
+
     audio.addEventListener('ended', () => {
         // fullscreen transition
         const transitionScreen = document.createElement('div');
