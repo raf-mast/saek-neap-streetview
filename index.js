@@ -553,7 +553,7 @@ const dialog_ReiSitting = () => {
 const dialog_Boss = () => {
     publicDialogImageClicked.style.display = "none"
     const img = dialog_Img("./assets/monster.png", "25vw", "40vw", "-20vw", "-10vw", "normal", publicItem);
-    const txt = dialog_Txt("Xatziarapis", "Oh? You're Approaching Me?", "-40vw", "-40vw", publicItem, [["Nah", null],["Use your super power on him", 'dialog_Boss_FINISH()']]);
+    const txt = dialog_Txt("Monster", "Oh? You're Approaching Me?", "-40vw", "-40vw", publicItem, [["Nah", null],["Use your super power on him", 'dialog_Boss_FINISH()']]);
 
     dialog_Cover(publicItem, [img, txt], '', publicDialogImageClicked)
 }
